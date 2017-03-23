@@ -1,24 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
 
+<html lang="" data-ng-app="myApp">
 <head>
-    <meta charset="utf-8">
+    <meta t="utf-8">
     <title>Planovac</title>
-
-    <!-- Google Fonts -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Page</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js" type="application/javascript"></script>
     <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700|Lato:400,100,300,700,900' rel='stylesheet' type='text/css'>
-    <!-- Custom Stylesheet -->
+    <script src="js/app.js"></script>
     <link rel="stylesheet" href="css/style.css">
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 </head>
+
 
 <body>
 <div class="container">
     <div class="top">
         <h1 id="title" class="hidden"><span id="logo">Planovac</span></h1>
     </div>
-    <div class="login-box animated fadeInUp">
+    <div class="login-box">
         <div class="box-header">
             <h2>Discussion Form</h2>
         </div>
@@ -32,12 +33,39 @@
         <a href="login.html"><button>Sign out</button></a>
         <br/>
         <br/>
-        Student 1: What are the topics discussed in the class today?
-        <br/>
-        Student 2: Google Maps and Camera API
-        <br/>
-        Professor: Thursday's class has been cancelled.
-        <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+        <div ng-controller="DiscussController">
+            <table>
+                <tr>
+                    <td>Topic</td>
+                    <td><input type="text" name="topic" id="topic" data-ng-model="topic" required/></td>
+                </tr>
+                <tr>
+                    <td>Comment</td>
+                    <td><input type="text" name="comment" id="comment" data-ng-model="comment" /></td>
+                </tr>
+
+            </table><br/>
+            <button id="register" name="register" ng_click="register(topic,comment)">Create Topic</button>
+            </form>
+
+            <br/>
+            <p > {{msg}}</p>
+
+
+            <button id="showtopic" name="showtopic" ng_click="showtopic(topic)">Show All Topics</button>
+
+            <ul>
+                <li ng-repeat="item in data1.data | filter:{topic:topic}">
+                    <p>{{item.topic}}</p>
+                    <p>{{item.comment}}</p>
+
+
+                </li>
+            </ul>
+
+        </div>
     </div>
+    <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+</div>
 </body>
 </html>

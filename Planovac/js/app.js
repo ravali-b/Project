@@ -14,9 +14,9 @@ app.controller("RegisterController", function ($scope, $http, $httpParamSerializ
             method: 'POST',
             url : 'https://api.mongolab.com/api/1/databases/planovac/collections/users?apiKey=1fB-Vh6r9XKxu-n0eW_4OeXvlAEViZl3',
             data: JSON.stringify({
-                firstname: firstname,
-                lastname: lastname,
-                username: username,
+                fname: firstname,
+                lname: lastname,
+                uname: username,
                 mobile: mobile,
                 sso: sso,
                 sid: sid,
@@ -46,19 +46,49 @@ app.controller("LoginController", function ($scope, $http, $httpParamSerializerJ
 
     $scope.pageClass = 'login';
     $scope.login = function(username, pword) {
-        sessionStorage.setItem('username1',username);
+        //sessionStorage.setItem('username1',username);
+        if(username==null||pword==null) {
+            alert("Username/ password can't be empty");
+            $window.location.replace("login.html");
+        }
+        else {
         $scope.uname = username;
-        alert("You're logged in as "+$scope.uname);
+        $scope.pass = pword;
         $http({
             method: 'GET',
             url : 'https://api.mongolab.com/api/1/databases/planovac/collections/users?apiKey=1fB-Vh6r9XKxu-n0eW_4OeXvlAEViZl3',
             /*contentType: "application/json"*/
-        }).then(function success(data) {
-            //alert(data);
-            $scope.data1 = angular.fromJson(data);
-            $window.location.href = "home.html";
-
+        }).success(function(response) {
+            //alert(response);
+            //$scope.data1 = angular.fromJson(data);
+            var list = response;
+            var count = 0;
+            for (i = 0; i < list.length; i++) {
+                if (list[i].username == $scope.uname && list[i].password == $scope.pass) {
+                    $scope.user=list[i].username;
+                    sessionStorage.setItem("firstname", list[i].firstname);
+                    sessionStorage.setItem("lastname", list[i].lastname);
+                    sessionStorage.setItem("username", list[i].username);
+                    sessionStorage.setItem("mobile", list[i].mobile);
+                    sessionStorage.setItem("sso", list[i].sso);
+                    sessionStorage.setItem("sid", list[i].sid);
+                    alert("You're logged in as "+$scope.uname);
+                    $window.location.href = "home.html";
+                    exit(0);
+                }
+                else {
+                    //alert("Incorrect username/password");
+                    count++;
+                }
+                //$window.location.href = "home.html";
+            }
+            if(count == list.length)
+            {
+                alert("Incorrect username/password");
+                $window.location.replace("login.html");
+            }
         })
+        }
 
     }
 
@@ -68,8 +98,7 @@ app.controller("ProfileController", function ($scope, $http, $httpParamSerialize
 
     $scope.pageClass = 'profile';
 
-        $scope.username = sessionStorage.getItem("username1");
-        alert($scope.username);
+        $scope.username = sessionStorage.getItem("username");
         $http({
             method: 'GET',
             url : 'https://api.mongolab.com/api/1/databases/planovac/collections/users?apiKey=1fB-Vh6r9XKxu-n0eW_4OeXvlAEViZl3',
@@ -82,6 +111,41 @@ app.controller("ProfileController", function ($scope, $http, $httpParamSerialize
         })
 
 
+});
+
+app.controller("DiscussController", function ($scope, $http, $httpParamSerializerJQLike,$window) {
+//alert("hi");
+    $scope.pageClass = 'register';
+    $scope.register = function(topic,comment) {
+
+        $http({
+            method: 'POST',
+            url : 'https://api.mongolab.com/api/1/databases/planovac/collections/discuss?apiKey=1fB-Vh6r9XKxu-n0eW_4OeXvlAEViZl3',
+            data: JSON.stringify({
+                topic: topic,
+                comment: comment
+            }),
+            contentType: "application/json"
+        }).success(function() {
+            $scope.topic ="";
+            $scope.comment ="";
+            $scope.msg ="Topic created successfully";
+            /*$window.location.href = "/lab7_mongo/www/Login.html";*/
+        })
+    }
+    $scope.showtopic = function(topic) {
+        $scope.topic = topic;
+        $http({
+            method: 'GET',
+            url : 'https://api.mongolab.com/api/1/databases/planovac/collections/discuss?apiKey=1fB-Vh6r9XKxu-n0eW_4OeXvlAEViZl3',
+            /*contentType: "application/json"*/
+        }).then(function success(data) {
+            //alert(data);
+            $scope.data1 = angular.fromJson(data);
+            /*$window.location.href = "/lab7_mongo/www/Home.html";*/
+
+        })
+    }
 });
 
 function logout()
@@ -128,8 +192,10 @@ function loginCallback(result)
             var str = "Name:" + resp['displayName'] + "<br>";
             str += "<img src='" + resp['image']['url'] + "' /><br>";
             str += "Email:" + email + "<br>";
+            str += "URL:" + resp['url'] + "<br>";
             document.getElementById("dispname").innerHTML = dispname;
-            document.getElementById("profile").innerHTML = str;
+            sessionStorage.setItem("username",dispname);
+            sessionStorage.setItem("profile",str);
             window.location.replace("home.html");
         });
     }

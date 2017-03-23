@@ -34,12 +34,13 @@
         <br/>
         <br/>
         <br/>
-        <p > Hello {{username}}</p>
+        <p > Hello <b>{{username}}</b> </p>
+        <span id="profile"></span>
         <ul>
-            <li ng-repeat="item in data1.data | filter:{uname:username}">
-                First Name:<span><b>{{item.fname}}</b></span><br/>
-                Last Name:<b>{{item.lname}}</b><br/>
-                Username:<b>{{item.uname}}</b><br/>
+            <li ng-repeat="item in data1.data | filter:{username:username}">
+                First Name:<span><b>{{item.firstname}}</b></span><br/>
+                Last Name:<b>{{item.lastname}}</b><br/>
+                Username:<b>{{item.username}}</b><br/>
                 Mobile:<b>{{item.mobile}}</b><br/>
                 SSO:<b>{{item.sso}}</b><br/>
                 SID:<b>{{item.sid}}</b>
@@ -50,5 +51,9 @@
     </div>
 </div>
 </body>
+<script>
+    if(typeof(sessionStorage)){
+        document.getElementById("profile").innerHTML = sessionStorage.getItem("profile");}
+</script>
 </html>
 

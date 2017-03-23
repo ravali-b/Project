@@ -31,16 +31,12 @@
         <input type="text" id="lastname" data-ng-model="lastname" required>
         <br/>-->
         <label for="username">Username</label>
-        
         <br/>
-        <input type="text" id="username" data-ng-model="username" required style="width:75%">
-        
+        <input type="text" id="username" data-ng-model="username" style="width:77%" required>
         <br/>
-        
         <label for="password">Password</label>
-        
         <br/>
-        <input type="password" id="password" data-ng-model="password" required style="width:77%">&emsp;
+        <input type="password" id="password" data-ng-model="password" style="width:77%" required>&emsp;
         <br/>
         <br/>
         <button id="login" name="login" ng_click="login(username,password)">Login</button></a>
@@ -49,8 +45,7 @@
         <br/><br/>
         <button id="gmail" onclick="login()"><img src="images/gmail.png" height="20"/>&nbsp;&nbsp;<b>Gmail Login</b></button>
         <br/>
-        <p >Thanks for Logging in <span id="dispname"></span><b>{{uname}}</b> </p><br/>
-        <span id="profile"></span>
+        <p >Thanks for Logging in <span id="dispname"></span><b>{{user}}</b> </p><br/>
         <br/><br/><br/><br/><br/>
     </div>
 
