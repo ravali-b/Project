@@ -1,19 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-ng-app="myApp">
 <head>
     <meta charset="UTF-8">
     <title>Planovac</title>
+    <!-- Google Fonts -->
     <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700|Lato:400,100,300,700,900' rel='stylesheet' type='text/css'>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js" type="application/javascript"></script>
+    <script src="js/app.js"></script>
     <!-- Custom Stylesheet -->
     <link rel="stylesheet" href="css/style.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 <body>
-<div class="container">
+<div class="container" ng-controller="ClassController">
     <div class="top">
         <h1 id="title" class="hidden"><span id="logo">Planovac</span></h1>
     </div>
@@ -31,16 +31,49 @@
         <a href="login.html"><button>Sign out</button></a>
         <br/>
         <br/>
-        <button style="float: left;margin-left: 60px"> Add new class</button>
+        <button style="float: left;margin-left: 60px" ng_click="showPage()"> Add new class</button>
         <br/>
         <br/>
-        <button style="float: left;margin-left: 60px"> Delete a class</button>
+        <button style="float: left;margin-left: 60px" ng_click="deleteClass()"> Delete a class</button>
         <br/>
         <br/>
-        <button style="float: left;margin-left: 60px">View classes</button><br/>
-        <br/><br/><br/>
+        <button style="float: left;margin-left: 60px" ng_click="viewClassPage()"> View Classes</button>
+        <br/><br/>
+        <div id="innerform2" style="visibility: hidden">
+        Enrolled Classes List:
+        <ol>
+            <li ng-repeat="item in data1.data | filter:{username:username}">
+                <center><table>
+                    <tr>
+                        <td>Classname:</td><td><b>{{item.classname}}</b></td>
+                    </tr>
+                    <tr>
+                        <td>From:</td><td><b>{{item.fromtime}}</b></td>
+                    </tr>
+                    <tr>
+                        <td>To:</td><td><b>{{item.totime}}</b></td>
+                    </tr>
+                    <tr>
+                        <td>Location:</td><td><b>{{item.location}}</b></td>
+                    </tr>
+                </table></center>
+            </li>
+        </ol>
+        </div>
+        <br/><br/>
+        <div id="innerform" style="visibility: hidden">
+        Available Classes List:<br/><br/>
+        <select multiple id="classes" name="class" style="height: 120px">
+            <option id="ase" value="Advanced Software Engineering,2.30pm,3.45pm,MNLC">Advanced Software Engineering</option>
+            <option id="crypt1" value="Cryptology 1,10.00am,11.15am,School of Education">Cryptology 1</option>
+            <option id="crypt2" value="Cryptology 2, 8.30am,9.45am,School of Education">Cryptology 2</option>
+            <option id="na1" value="Network Architecture I, 1.00pm,2.15pm,MNLC">Network Architecture I</option>
+            <option id="pgm" value="Fund/ Probabilistic Graph Models, 7.00pm,8.15pm,FH">Fund/ Probabilistic Graph Models</option>
+        </select><br/><br/>
+        <button type="submit"  ng_click="addClass(classes)">submit</button>
+        </div>
         <br/><br/><br/><br/><br/><br/>
-
+    </div>
     </div>
 </body>
 </html>

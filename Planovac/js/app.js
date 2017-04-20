@@ -1,15 +1,17 @@
 var app = angular.module("myApp", [])
-
-
+app.run(function ($http) {
+    // Sends this header with any AJAX request
+    $http.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
+    // Send this header only in post requests. Specifies you are sending a JSON object
+    $http.defaults.headers.post['dataType'] = 'json'
+});
 app.controller("RegisterController", function ($scope, $http, $httpParamSerializerJQLike,$window) {
     $scope.createFixed = function() {
         alert("hi");
         $window.location.href = '/lab7_mongo/www/Login.html';
     };
-
     $scope.pageClass = 'register';
     $scope.register = function(firstname, lastname, username, mobile, sso, sid, password, cpassword) {
-
         $http({
             method: 'POST',
             url : 'https://api.mongolab.com/api/1/databases/planovac/collections/users?apiKey=1fB-Vh6r9XKxu-n0eW_4OeXvlAEViZl3',
@@ -94,8 +96,72 @@ app.controller("LoginController", function ($scope, $http, $httpParamSerializerJ
 
 });
 
-app.controller("ProfileController", function ($scope, $http, $httpParamSerializerJQLike,$window) {
+app.controller("ClassController", function ($scope, $http, $httpParamSerializerJQLike,$window) {
+    $scope.showPage = function(){
+        var page = document.getElementById("innerform");
+        page.style.visibility='visible';
+    }
+    $scope.viewClassPage = function(){
+        alert("in view class function");
+        var page = document.getElementById("innerform2");
+        page.style.visibility='visible';
+    }
+    $scope.username = sessionStorage.getItem("username");
+    var uname = sessionStorage.getItem("username");
+    $scope.pageClass = 'classes';
+    for(i=0;i<3;i++){
+    $scope.addClass = function(classes) {
+        //alert("inside function");
+        var e = document.getElementById("classes");
+        //alert(e);
+        var cname = e.options[e.selectedIndex].value;
+        //alert(cname);
+        var str_array = cname.split(',');
+        //alert(str_array[0]);
+        $http({
+            method: 'PUT',
+            url : 'https://api.mongolab.com/api/1/databases/planovac/collections/users?apiKey=1fB-Vh6r9XKxu-n0eW_4OeXvlAEViZl3&q={"username":"'+uname+'"}',
+            data: JSON.stringify({
+                "$set" : {classname: str_array[0], fromtime: str_array[1], totime: str_array[2], location: str_array[3]}
+            }),
+            type: "PUT",
+            contentType: "application/json"
+        }).success(function() {
+            $scope.classname ="";
+            $scope.fromtime ="";
+            $scope.totime ="";
+            $scope.location ="";
+            alert("Class Successfully added");
+        })
+    } }
+    $scope.deleteClass = function() {
+        $http({
+            method: 'PUT',
+            url : 'https://api.mongolab.com/api/1/databases/planovac/collections/users?apiKey=1fB-Vh6r9XKxu-n0eW_4OeXvlAEViZl3&q={"username":"'+uname+'"}',
+            data: JSON.stringify({
+                "$unset": {classname: "", fromtime: "", totime: "", location: ""}
+            }),
+            type: "PUT",
+            contentType: "application/json"
+        }).then(function success(data) {
+            //alert(data);
+            $scope.data1 = angular.fromJson(data);
+            //$window.location.href = "home.html";
+            alert("Class Deleted");
+        })
+    }
+    $http({
+        method: 'GET',
+        url: 'https://api.mongolab.com/api/1/databases/planovac/collections/users?apiKey=1fB-Vh6r9XKxu-n0eW_4OeXvlAEViZl3',
+    }).then(function success(data) {
+        //alert(data);
+        $scope.data1 = angular.fromJson(data);
+        //$window.location.href = "home.html";
+    })
 
+});
+
+app.controller("ProfileController", function ($scope, $http, $httpParamSerializerJQLike,$window) {
     $scope.pageClass = 'profile';
 
         $scope.username = sessionStorage.getItem("username");
@@ -112,6 +178,7 @@ app.controller("ProfileController", function ($scope, $http, $httpParamSerialize
 
 
 });
+
 
 app.controller("DiscussController", function ($scope, $http, $httpParamSerializerJQLike,$window) {
 //alert("hi");
